@@ -1,6 +1,6 @@
 import numpy as np
-from ebo import ebo
-from test_functions import plot_f, sampled_gp_func, sample_z
+from ebo_core.ebo import ebo
+from test_functions.simple_functions import plot_f, SampledGpFunc, sample_z
 import time
 import logging
 logging.basicConfig(filename='example.log',level=logging.DEBUG)
@@ -12,14 +12,14 @@ k = np.array([10]*dx)
 x_range = np.matlib.repmat([[0.],[1.]], 1, dx)
 sigma = 0.01
 n = 100
-f = sampled_gp_func(x_range, dx, z, k, n, sigma)
+f = SampledGpFunc(x_range, dx, z, k, n, sigma)
 plot_f(f)
 ##################################################################
 
 # run ebo
 options = {'x_range':x_range, # input domain
            'dx':x_range.shape[1], # input dimension
-           'max_value':f.fmax + sigma*5, # target value 
+           'max_value':f.f_max + sigma*5, # target value
            'T':10, # number of iterations
            'B':10, # number of candidates to be evaluated
            'dim_limit':3, # max dimension of the input for each additive function component
@@ -50,4 +50,5 @@ e = ebo(f, options)
 start = time.time()
 e.run()
 
-print 'elapsed time: ', time.time()-start
+print "elapsed time: ", time.time() - start
+
